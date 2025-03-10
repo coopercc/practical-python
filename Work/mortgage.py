@@ -27,6 +27,9 @@ while principal > 0:
 
     total_paid += monthlyPayment
     total_months += 1
+    print(
+        f"{total_months} months of payment, ${round(total_paid, 2)} paid so far, ${round(principal, 2)} remaining"
+    )
     print(total_months, round(total_paid, 2), round(principal, 2))
 
 print("Total paid", round(total_paid, 2))
