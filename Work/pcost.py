@@ -2,12 +2,33 @@
 #
 # Exercise 1.27
 
-total_cost = 0
+import csv
+import sys
 
-with open("Data/portfolio.csv", "rt") as f:
-    headers = next(f)
-    for line in f:
-        data = line.split(",")
-        total_cost = total_cost + (int(data[1]) * float(data[2]))
 
-print("Total Cost", total_cost)
+def portfolio_cost(filename):
+    total_cost = 0
+
+    with open(filename, "rt") as f:
+        rows = csv.reader(f)
+        headers = next(rows)
+        for row in rows:
+            try:
+
+                total_cost = total_cost + (int(row[1]) * float(row[2]))
+            except ValueError:
+                print("couldn't parse", row)
+
+    return total_cost
+
+
+# cost = portfolio_cost("Data/portfolio.csv")
+# # cost = portfolio_cost("Data/missing.csv")
+
+
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = "Data/portfolio.csv"
+cost = portfolio_cost(filename)
+print("Total cost", cost)
