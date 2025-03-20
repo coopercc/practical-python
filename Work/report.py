@@ -79,3 +79,15 @@ print(("-" * 10 + " ") * len(headers))
 
 for r in report:
     print("%10s %10d %10s %10.2f" % (r[0], r[1], f"${r[2]:.2f}", r[3]))
+
+
+# Sample from 2.6
+import csv
+
+f = open("Data/portfoliodate.csv")
+rows = csv.reader(f)
+headers = next(rows)
+select = ["name", "shares", "price"]
+indices = [headers.index(colname) for colname in select]
+row = next(rows)
+record = {colname: row[index] for colname, index in zip(select, indices)}
