@@ -6,6 +6,9 @@ import csv
 
 
 def read_portfolio(filename):
+    """
+    Read a portfolio file and return a list of dictionaries.
+    """
     portfolio = []
 
     with open(filename, "rt") as f:
@@ -54,40 +57,27 @@ def make_report(portfolio, prices):
     return report
 
 
-portfolio = read_portfolio("Data/portfoliodate.csv")
-prices = read_prices("Data/prices.csv")
+def print_report(report):
+    """
+    Print a report of the portfolio.
+    """
+    headers = ("Name", "Shares", "Price", "Change")
 
-print(portfolio)
-print(prices)
+    print("%10s %10s %10s %10s" % headers)
+    print(("-" * 10 + " ") * len(headers))
 
-current_value = 0.0
-portfolio_gain = 0.0
-
-for s in portfolio:
-    current_price = prices[s["name"]]
-    current_value += s["shares"] * current_price
-    portfolio_gain += s["shares"] * (current_price - s["price"])
-
-print(current_value)
-print(portfolio_gain)
-
-report = make_report(portfolio, prices)
-headers = ("Name", "Shares", "Price", "Change")
-
-print("%10s %10s %10s %10s" % headers)
-print(("-" * 10 + " ") * len(headers))
-
-for r in report:
-    print("%10s %10d %10s %10.2f" % (r[0], r[1], f"${r[2]:.2f}", r[3]))
+    for r in report:
+        print("%10s %10d %10s %10.2f" % (r[0], r[1], f"${r[2]:.2f}", r[3]))
 
 
-# Sample from 2.6
-import csv
+def portfolio_report(portfolio_filename, prices_filename):
+    """
+    Read a portfolio file and a prices file, and print a report.
+    """
+    portfolio = read_portfolio(portfolio_filename)
+    prices = read_prices(prices_filename)
+    report = make_report(portfolio, prices)
+    print_report(report)
 
-f = open("Data/portfoliodate.csv")
-rows = csv.reader(f)
-headers = next(rows)
-select = ["name", "shares", "price"]
-indices = [headers.index(colname) for colname in select]
-row = next(rows)
-record = {colname: row[index] for colname, index in zip(select, indices)}
+
+portfolio_report("Data/portfoliodate.csv", "Data/prices.csv")
