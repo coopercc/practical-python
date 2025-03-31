@@ -10,14 +10,16 @@ def read_portfolio(filename):
     """
     Read a portfolio file and return a list of dictionaries.
     """
-    return parse_csv(
-        filename, select=["name", "shares", "price"], types=[str, int, float]
-    )
+    with open(filename) as lines:
+        return parse_csv(
+            lines, select=["name", "shares", "price"], types=[str, int, float]
+        )
 
 
 def read_prices(filename):
-    pricelist = parse_csv(filename, types=[str, float], has_headers=False)
-    return dict(pricelist)
+    with open(filename) as lines:
+        pricelist = parse_csv(lines, types=[str, float], has_headers=False)
+        return dict(pricelist)
 
 
 def make_report(portfolio, prices):
