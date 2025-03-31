@@ -2,45 +2,22 @@
 #
 # Exercise 2.4
 
-import csv
+import sys
+from fileparse import parse_csv
 
 
 def read_portfolio(filename):
     """
     Read a portfolio file and return a list of dictionaries.
     """
-    portfolio = []
-
-    with open(filename, "rt") as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        for i, row in enumerate(rows):
-            record = dict(zip(headers, row))
-
-            try:
-                holding = {
-                    "name": record["name"],
-                    "shares": int(record["shares"]),
-                    "price": float(record["price"]),
-                }
-            except ValueError:
-                print(f"Row {i}: Couldn't convert {row}")
-            portfolio.append(holding)
-
-    return portfolio
+    return parse_csv(
+        filename, select=["name", "shares", "price"], types=[str, int, float]
+    )
 
 
 def read_prices(filename):
-    prices = {}
-    with open(filename, "rt") as f:
-        rows = csv.reader(f)
-        for row in rows:
-            try:
-                prices[row[0]] = float(row[1])
-            except IndexError:
-                pass
-
-    return prices
+    pricelist = parse_csv(filename, types=[str, float], has_headers=False)
+    return dict(pricelist)
 
 
 def make_report(portfolio, prices):
@@ -80,4 +57,13 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
-portfolio_report("Data/portfoliodate.csv", "Data/prices.csv")
+def main(args):
+    if len(args) != 3:
+        raise SystemExit(f"Usage: {args[0]} " "portoliofile pricefile")
+    portfolio_report(args[1], args[2])
+
+
+# portfolio_report("Data/portfoliodate.csv", "Data/prices.csv")
+
+if __name__ == "__main__":
+    main(sys.argv)
