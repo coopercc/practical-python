@@ -4,6 +4,7 @@
 
 import sys
 from fileparse import parse_csv
+from stock import Stock
 
 
 def read_portfolio(filename):
@@ -11,9 +12,13 @@ def read_portfolio(filename):
     Read a portfolio file and return a list of dictionaries.
     """
     with open(filename) as lines:
-        return parse_csv(
+        portfolio_dicts = parse_csv(
             lines, select=["name", "shares", "price"], types=[str, int, float]
         )
+
+        portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portfolio_dicts]
+
+        return portfolio
 
 
 def read_prices(filename):
@@ -22,14 +27,14 @@ def read_prices(filename):
         return dict(pricelist)
 
 
-def make_report(portfolio, prices):
+def make_report(portfolio: list[Stock], prices):
     report = []
     for s in portfolio:
         line = (
-            s["name"],
-            s["shares"],
-            prices[s["name"]],
-            prices[s["name"]] - s["price"],
+            s.name,
+            s.shares,
+            prices[s.name],
+            prices[s.name] - s.price,
         )
         report.append(line)
 

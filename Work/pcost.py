@@ -13,7 +13,7 @@ def portfolio_cost(filename):
 
     portfolio = read_portfolio(filename)
     for item in portfolio:
-        total_cost += item["shares"] * item["price"]
+        total_cost += item.shares * item.price
 
     return total_cost
 
